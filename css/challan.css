@@ -1,0 +1,165 @@
+/* Challan Page Specific Styles */
+.challan-section {
+    padding: 100px 0;
+    background-color: var(--section-bg);
+}
+
+.challan-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: var(--card-bg);
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.dark-mode .challan-container {
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.challan-form-container {
+    padding: 40px;
+}
+
+.challan-form {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group label {
+    font-weight: 500;
+    color: var(--text-color);
+}
+
+.form-group input {
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-family: 'Poppins', sans-serif;
+    transition: all 0.3s ease;
+}
+
+.dark-mode .form-group input {
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    border-color: #444;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+}
+
+.challan-result {
+    padding: 0 40px 40px;
+}
+
+.challan-details {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.challan-details h3 {
+    color: var(--primary-color);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--light-gray);
+}
+
+.detail-label {
+    font-weight: 500;
+    color: var(--text-color);
+}
+
+.detail-value {
+    color: var(--gray-color);
+    text-align: right;
+}
+
+.status-paid .detail-value {
+    color: var(--success-color);
+    font-weight: 600;
+}
+
+.status-unpaid .detail-value {
+    color: var(--danger-color);
+    font-weight: 600;
+}
+
+.payment-options {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid var(--light-gray);
+}
+
+.payment-options h4 {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--text-color);
+}
+
+.payment-options button {
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.no-result {
+    text-align: center;
+    padding: 30px;
+}
+
+.no-result i {
+    font-size: 3rem;
+    color: var(--warning-color);
+    margin-bottom: 20px;
+}
+
+.no-result h3 {
+    color: var(--text-color);
+    margin-bottom: 10px;
+}
+
+.no-result p {
+    color: var(--gray-color);
+    margin-bottom: 10px;
+}
+
+@media (max-width: 768px) {
+    .challan-form-container,
+    .challan-result {
+        padding: 30px 20px;
+    }
+    
+    .detail-row {
+        flex-direction: column;
+        gap: 5px;
+    }
+    
+    .detail-value {
+        text-align: left;
+    }
+    
+    .payment-options button {
+        width: 100%;
+        margin-right: 0;
+    }
+}

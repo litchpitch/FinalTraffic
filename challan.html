@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Challan | Automatic Challan System</title>
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/challan.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="logo">Automatic Challan System</div>
+            <nav class="navbar">
+                <a href="index.html">Home</a>
+                <a href="index.html#features">Features</a>
+                <a href="index.html#team">Team</a>
+                <a href="index.html#contact">Contact</a>
+                <a href="challan.html">Verify Challan</a>
+            </nav>
+            <div class="dark-mode-toggle">
+                <i class="fas fa-moon"></i>
+                <i class="fas fa-sun"></i>
+            </div>
+            <div class="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </header>
+
+    <section class="challan-section">
+        <div class="container">
+            <h2 class="section-title">Verify Your Challan</h2>
+            <div class="challan-container">
+                <div class="challan-form-container">
+                    <form id="challanForm" class="challan-form" onsubmit="viewChallan(); return false;">
+                        <div class="form-group">
+                            <label for="challanId">Enter Challan ID</label>
+                            <input type="text" id="challanId" placeholder="e.g. 123456" required>
+                        </div>
+                        <button type="submit" onclick="viewChallan()" class="btn btn-primary">Check Status</button>
+                    </form>
+                </div>
+                <div id="challanResult" class="challan-result" style="display: none;"></div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-about">
+                    <h3>Automatic Challan System</h3>
+                    <p>An innovative solution for modern traffic violation management and automated challan processing.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="index.html#features">Features</a></li>
+                        <li><a href="index.html#team">Team</a></li>
+                        <li><a href="index.html#contact">Contact</a></li>
+                        <li><a href="challan.html">Verify Challan</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Automatic Challan System. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+<script>
+
+     // Mobile menu toggle
+        document.querySelector('.menu-toggle').addEventListener('click', function() {
+            document.querySelector('.navbar').classList.toggle('active');
+        });
+        
+        // Dark mode toggle
+        const darkModeToggle = document.querySelector('.dark-mode-toggle');
+        const body = document.body;
+        const darkModeIcon = darkModeToggle.querySelector('.fa-moon');
+        const lightModeIcon = darkModeToggle.querySelector('.fa-sun');
+
+        // Check for saved user preference
+        if (localStorage.getItem('darkMode') === 'enabled') {
+            body.classList.add('dark-mode');
+            darkModeIcon.style.display = 'none';
+            lightModeIcon.style.display = 'inline-block';
+        } else {
+            darkModeIcon.style.display = 'inline-block';
+            lightModeIcon.style.display = 'none';
+        }
+
+        // Toggle dark mode
+        darkModeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            
+            if (body.classList.contains('dark-mode')) {
+                localStorage.setItem('darkMode', 'enabled');
+                darkModeIcon.style.display = 'none';
+                lightModeIcon.style.display = 'inline-block';
+            } else {
+                localStorage.setItem('darkMode', 'disabled');
+                darkModeIcon.style.display = 'inline-block';
+                lightModeIcon.style.display = 'none';
+            }
+        });
+
+    async function viewChallan() {
+        const challanID = document.getElementById('challanId').value;
+        const resultDiv = document.getElementById('challanResult');
+
+        try {
+            const response = await fetch(`http://localhost:5000/api/challans/${challanID}`);
+            const challan = await response.json();
+
+            if (response.status !== 200) {
+                throw new Error(challan.message);
+            }
+
+            let html = `
+                <div class="challan-details">
+                    <h3><i class="fas fa-receipt"></i> Challan Details</h3>
+                    <div class="detail-row"><span class="detail-label">Challan ID:</span><span class="detail-value">${challan.challanId}</span></div>
+                    <div class="detail-row"><span class="detail-label">Name:</span><span class="detail-value">${challan.name}</span></div>
+                    <div class="detail-row"><span class="detail-label">Vehicle Registration:</span><span class="detail-value">${challan.vehicleRegistration}</span></div>
+                    <div class="detail-row"><span class="detail-label">Violation Date:</span><span class="detail-value">${challan.date}</span></div>
+                    <div class="detail-row"><span class="detail-label">Violation Type:</span><span class="detail-value">${challan.violation}</span></div>
+                    <div class="detail-row"><span class="detail-label">Fine Amount:</span><span class="detail-value">${challan.fineAmount}</span></div>`;
+
+            if (challan.status === "Paid") {
+                html += `
+                    <div class="detail-row status-paid"><span class="detail-label">Status:</span><span class="detail-value">${challan.status}</span></div>
+                    <div class="detail-row"><span class="detail-label">Paid Date:</span><span class="detail-value">${challan.paidDate}</span></div>
+                    <div class="detail-row"><span class="detail-label">Payment Method:</span><span class="detail-value">${challan.paymentMethod}</span></div>`;
+            } else {
+                html += `
+                    <div class="detail-row status-unpaid"><span class="detail-label">Status:</span><span class="detail-value">${challan.status}</span></div>
+                    <div class="detail-row"><span class="detail-label">Due Date:</span><span class="detail-value">${challan.dueDate}</span></div>
+                    <div class="detail-row"><span class="detail-label">Violation Location:</span><span class="detail-value">${challan.location}</span></div>`;
+            }
+
+            html += `</div>`;
+            resultDiv.innerHTML = html;
+        } catch (err) {
+            resultDiv.innerHTML = `
+                <div class="no-result">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <h3>No Challan Found</h3>
+                    <p>The Challan ID <strong>${challanID}</strong> does not exist in our database.</p>
+                    <p>Please check the ID and try again, or contact our support team if you believe this is an error.</p>
+                </div>`;
+        }
+
+        resultDiv.style.display = 'block';
+    }
+</script>
+
+</body>
+</html>
